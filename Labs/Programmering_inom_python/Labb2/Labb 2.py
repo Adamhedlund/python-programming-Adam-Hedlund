@@ -29,8 +29,6 @@ with open(r"python-programming-Adam-Hedlund\Labs\Programmering_inom_python\Labb2
             test_x.append(float(x_val))
             test_y.append(float(y_val))
         
-
-
 training_points = np.array(list(zip(width, height)))
 pichu = data[data[:,2] == 0]
 pikachu = data[data[:,2] == 1]
@@ -51,50 +49,44 @@ for q in testpoints:
     nn_idx.append(int(j))
     #print(f"{q} is classified as {name_map.get(y)}")
 
-while True:
-    try:
-        user_input_x = float(input("Skriv in ett positivt x-värde: "))
-        user_input_y = float(input("Skriv in positivt y-värde: "))
+def user_input():
+    while True:
+        try:
+            user_input_x = float(input("Skriv in ett positivt x-värde: "))
+            user_input_y = float(input("Skriv in positivt y-värde: "))
         
-        if user_input_x > 0 and user_input_y > 0:
-            print(f"Du angav x = {user_input_x}  och = y {user_input_y}!")
-            break
-        else:
-            print("Båda talen måste vara större än 0, försök igen!")
-    except ValueError:
-        print("Du måste ange ett tal (heltal/decimaltal), försök igen!")
+            if user_input_x > 0 and user_input_y > 0:
+                print(f"Du angav x = {user_input_x}  och = y {user_input_y}!")
+                return np.array([user_input_x, user_input_y])
+                break
+            else:
+                print("Båda talen måste vara större än 0, försök igen!")
+        except ValueError:
+            print("Du måste ange ett tal (heltal/decimaltal), försök igen!")
 
-user_input_point = np.array([user_input_x, user_input_y])
+user_input = user_input()
 
-
-d = np.linalg.norm(training_points - user_input_point, axis =1)
+d = np.linalg.norm(training_points - user_input, axis =1)
 j = int(np.argmin(d))
 y = int(labels_np[j])
 pred_labels.append(int(y))
 nn_idx.append(int(j))
-print(f"User input:{user_input_point} is classified as {name_map.get(y)}")
+print(f"Dina koordinater: {user_input} är klassifierad som {name_map.get(y)} med 1st nn!")
 
 k = 10
 
-for q in user_input_point:
-    d = np.linalg.norm(training_points - q, axis=1)
-    k_indices = np.argsort(d)[:k]
-    k_labels = labels_np[k_indices]
-    counts = np.bincount(k_labels.astype(int))
-    y = np.argmax(counts)
-    pred_labels.append(int(y))
-    nn_idx.append(k_indices)
-
-    print(f"User input: {user_input_point} is classified as {name_map.get(y)}")
-
+d = np.linalg.norm(training_points - user_input, axis=1)
+k_indices = np.argsort(d)[:k]
+k_labels = labels_np[k_indices]
+count = np.bincount(k_labels.astype(int))
+y10 =np.argmax(count)
+print(f"Dina koordinater: {user_input} är klassifierad som {name_map.get(y10)} med 10 st nn!")    
     
-    
-    
-
 plt.scatter(pichu[:,0], pichu[:,1], label="Pichu", color="blue")
 plt.scatter(pikachu[:,0], pikachu[:,1], label="Pickachu", color="Yellow")
 plt.scatter(test_x, test_y, label="Testpunkter", color="red")
-plt.scatter(user_input_point[0], user_input_point[1], label=f"{user_input_point}={name_map.get(y)}", marker="*", color="green")
+plt.scatter(user_input[0], user_input[1], label=f"{user_input}={name_map.get(y)} med 1st nn", marker="*", color="green")
+plt.scatter(user_input[0], user_input[1], label=f"{user_input}={name_map.get(y10)} med 10st nn", marker="*", color="green")
 plt.xlabel("Width (cm)")
 plt.ylabel("Height (cm)")
 plt.title("Pichu vs Pikachu")
