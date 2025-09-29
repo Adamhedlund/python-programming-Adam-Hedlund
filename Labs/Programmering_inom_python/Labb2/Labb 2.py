@@ -67,7 +67,7 @@ y = int(labels_np[j])
 pred_labels.append(int(y))
 nn_idx.append(int(j))
 
-#k-NN: tar minsta avstånden för k, räknar sen ihop antal "röster" för att klassificiera inputen.
+#k-NN: tar minsta avstånden för k, räknar sen ihop antal "röster" för att klassificiera                                
 k = min(10, len(training_points))
 k_indices = np.argsort(d)[:k]
 k_labels = labels_np[k_indices]
